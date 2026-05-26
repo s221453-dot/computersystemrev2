@@ -12,7 +12,8 @@
         th, td { border: 1px solid #ccc; padding: 10px; text-align: left; }
         th { background-color: #3498db; color: white; }
         .highlight { font-weight: bold; color: #e74c3c; }
-        .system-box { border: 2px dashed #7f8c8d; padding: 15px; background: #fff; border-radius: 8px; }
+        .system-box { border: 2px dashed #7f8c8d; padding: 15px; background: #fff; border-radius: 8px; margin-bottom: 20px; }
+        .bus-unidirectional { color: #c0392b; font-weight: bold; text-decoration: underline; }
     </style>
 </head>
 <body>
@@ -22,19 +23,18 @@
     <div class="system-box">
         <h3>The System Unit & Motherboard</h3>
         <p><b>System Unit:</b> The main case that houses the internal components.</p>
-        <p><b>Motherboard:</b> The main circuit board. It acts as the "highway," connecting the CPU, RAM, and all other peripherals via buses.</p>
+        <p><b>Motherboard:</b> The main circuit board. It acts as the "highway," connecting the CPU, RAM, and all other peripherals via <b>System Buses</b>.</p>
     </div>
 
     <h2>1. The Central Processing Unit (CPU)</h2>
     <p>The "Brain" of the computer. Its performance is measured by:</p>
     <ul>
         <li><b>Clock Speed:</b> Measured in <b>Hertz (Hz)</b>. The number of cycles performed per second.</li>
-        <li><b>Clock Cycle:</b> The smallest unit of time for a processor to perform an instruction.</li>
         <li><b>Cores:</b> Multiple processors on one chip. More cores = better multi-tasking.</li>
-        <li><b>Word Length:</b> The number of bits a CPU can process at once (e.g., 64-bit).</li>
+        <li><b>Word Length:</b> The number of bits a CPU can process at once (e.g., 64-bit). Higher word length means more data processed per cycle.</li>
     </ul>
 
-    <h3>Internal Components of CPU</h3>
+    <h3>Internal Components & Registers</h3>
     <table>
         <tr>
             <th>Component</th>
@@ -42,38 +42,67 @@
         </tr>
         <tr>
             <td><b>Control Unit (CU)</b></td>
-            <td>Manages the execution of instructions and controls the flow of data.</td>
+            <td>Manages the execution of instructions and coordinates all components.</td>
         </tr>
         <tr>
             <td><b>ALU</b></td>
-            <td>Arithmetic Logic Unit. Performs math ($+, -, \times, \div$) and logic (AND, OR, NOT).</td>
-        </tr>
-        <tr>
-            <td><b>Registers</b></td>
-            <td>High-speed, tiny storage locations <b>inside</b> the CPU.</td>
+            <td>Arithmetic Logic Unit. Performs calculations and logical comparisons.</td>
         </tr>
         <tr>
             <td><b>Cache Memory</b></td>
-            <td>Very fast memory between CPU and RAM. Stores frequently used data to speed up processing.</td>
+            <td>Fast, expensive memory inside/near CPU to store frequently used data.</td>
         </tr>
     </table>
 
-    <h3>Special Purpose Registers (The "Big Four")</h3>
+    <h3>The "Big Four" Special Purpose Registers</h3>
     <ul>
-        <li><b>Program Counter (PC):</b> Holds the address of the <b>next</b> instruction.</li>
-        <li><b>MAR:</b> Memory Address Register. Holds the address of the current data being read/written.</li>
-        <li><b>MDR:</b> Memory Data Register. Holds the actual data fetched from or waiting to be sent to memory.</li>
-        <li><b>Accumulator:</b> Stores the intermediate results of calculations from the ALU.</li>
+        <li><b>Program Counter (PC):</b> Holds the address of the <span class="highlight">next</span> instruction to be fetched.</li>
+        <li><b>MAR (Memory Address Register):</b> Holds the memory address currently being accessed.</li>
+        <li><b>MDR (Memory Data Register):</b> Holds the actual data/instruction being transferred to/from memory.</li>
+        <li><b>Accumulator:</b> Stores intermediate results from ALU operations.</li>
     </ul>
-
-    <h2>2. The Machine Cycle</h2>
-    <p>The process of handling one instruction: <b>Fetch &rarr; Decode &rarr; Execute &rarr; Store.</b></p>
 
     <hr>
 
-    <h2>3. Memory Hierarchy</h2>
-    
-    <h3>Main Memory: RAM vs. ROM</h3>
+    <h2>2. System Buses (Data Highways)</h2>
+    <p>Buses are paths that allow data to travel between the CPU and other components.</p>
+    <table>
+        <tr>
+            <th>Bus Name</th>
+            <th>Direction</th>
+            <th>Purpose</th>
+        </tr>
+        <tr>
+            <td><b>Address Bus</b></td>
+            <td class="bus-unidirectional">Unidirectional (CPU to RAM)</td>
+            <td>Specifies the location (address) of data to be read or written.</td>
+        </tr>
+        <tr>
+            <td><b>Data Bus</b></td>
+            <td>Bidirectional</td>
+            <td>Carries the actual data or instructions between CPU and memory.</td>
+        </tr>
+        <tr>
+            <td><b>Control Bus</b></td>
+            <td>Bidirectional</td>
+            <td>Sends command signals (Read, Write, Reset) and timing pulses.</td>
+        </tr>
+    </table>
+
+    <hr>
+
+    <h2>3. The Machine Cycle (Steps)</h2>
+    <ol>
+        <li><b>Fetch:</b> The address in the <b>PC</b> moves to <b>MAR</b>. The instruction at that address is sent via <b>Data Bus</b> to <b>MDR</b>, then to <b>CIR</b>. PC increments.</li>
+        <li><b>Decode:</b> The <b>Control Unit</b> interprets the instruction in the CIR.</li>
+        <li><b>Execute:</b> The instruction is carried out (often by the <b>ALU</b>).</li>
+        <li><b>Store:</b> Results are saved back into a register or memory.</li>
+    </ol>
+
+    <hr>
+
+    <h2>4. Memory & Secondary Storage</h2>
+    <h3>Main Memory Comparison</h3>
     <table>
         <tr>
             <th>Feature</th>
@@ -82,36 +111,44 @@
         </tr>
         <tr>
             <td><b>Volatility</b></td>
-            <td class="highlight">Volatile (Data lost when power is off)</td>
-            <td>Non-Volatile (Data stays)</td>
+            <td class="highlight">Volatile (Lost without power)</td>
+            <td>Non-Volatile (Stays)</td>
         </tr>
         <tr>
             <td><b>Usage</b></td>
-            <td>Current running programs/data.</td>
-            <td>Startup instructions (BIOS/Firmware).</td>
+            <td>Current programs and active data.</td>
+            <td>Startup instructions (BIOS).</td>
         </tr>
     </table>
 
-    <h3>Secondary Storage</h3>
-    <p>Used for permanent storage. Categorized by <b>Access Method</b>:</p>
-    <ul>
-        <li><b>Sequential Access:</b> Must read data in order (e.g., Magnetic Tape). Slow for finding specific files.</li>
-        <li><b>Direct Access:</b> Can jump straight to any file (e.g., Hard Disk, SSD). Fast.</li>
-    </ul>
-
+    <h3>Storage Technologies</h3>
     <table>
         <tr>
             <th>Storage Type</th>
             <th>Technology</th>
-            <th>Pros</th>
-            <th>Cons</th>
+            <th>Notes</th>
         </tr>
         <tr>
             <td><b>Hard Disk (HDD)</b></td>
             <td>Magnetic</td>
-            <td>Cheap, huge capacity.</td>
-            <td>Slow, fragile (moving parts).</td>
+            <td>Direct access. Cheap but slow. Requires <b>Defragmentation</b>.</td>
         </tr>
         <tr>
-            <td><b>SSD</b></td>
-            <td>Flash
+            <td><b>SSD / USB Flash</b></td>
+            <td>Flash (Solid State)</td>
+            <td>Direct access. Very fast and durable. No moving parts.</td>
+        </tr>
+        <tr>
+            <td><b>Optical (CD/DVD)</b></td>
+            <td>Laser (Optical)</td>
+            <td>Uses "Pits and Lands". Great for mass distribution.</td>
+        </tr>
+        <tr>
+            <td><b>Magnetic Tape</b></td>
+            <td>Magnetic</td>
+            <td><span class="highlight">Sequential Access</span>. Only used for backups.</td>
+        </tr>
+    </table>
+
+</body>
+</html>
