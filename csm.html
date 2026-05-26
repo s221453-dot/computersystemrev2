@@ -2,19 +2,38 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>DSE ICT Dynamic Exam System</title>
+    <title>DSE ICT Ultimate Exam Engine</title>
     <style>
-        body { font-family: "Times New Roman", serif; background: #515a5a; padding: 20px; display: flex; justify-content: center; }
-        .paper { background: white; width: 850px; padding: 50px; box-shadow: 0 0 20px rgba(0,0,0,0.5); border-radius: 4px; }
-        .header { border: 2px solid #000; text-align: center; padding: 10px; margin-bottom: 20px; }
-        .section-title { background: #eee; padding: 5px; font-weight: bold; margin: 20px 0; border: 1px solid #000; }
-        .q-block { margin-bottom: 25px; }
-        .options { list-style: none; padding-left: 20px; }
-        .long-q-area { border: 1px solid #ccc; height: 60px; margin: 10px 0; background: #fafafa; }
-        .btn-container { text-align: center; margin-top: 30px; border-top: 2px solid #000; padding-top: 20px; }
-        button { padding: 12px 30px; cursor: pointer; font-weight: bold; background: #2c3e50; color: white; border: none; }
-        #results { display: none; background: #e8f8f5; border: 2px solid #27ae60; padding: 20px; margin-top: 20px; }
-        .grade-stamp { font-size: 3rem; color: #c0392b; font-weight: bold; border: 4px solid #c0392b; display: inline-block; padding: 10px; transform: rotate(-5deg); }
+        :root { --dse-blue: #2c3e50; --dse-gold: #f39c12; --dse-green: #27ae60; --paper-bg: #fff; }
+        body { font-family: "Times New Roman", serif; background: #515a5a; padding: 20px; line-height: 1.5; }
+        .paper { background: var(--paper-bg); max-width: 900px; margin: auto; padding: 60px; box-shadow: 0 0 30px rgba(0,0,0,0.5); border-radius: 2px; position: relative; }
+        
+        /* Header & Labels */
+        .header { border: 2px solid #000; text-align: center; padding: 15px; margin-bottom: 30px; }
+        .section-title { background: #f0f0f0; padding: 8px; font-weight: bold; margin: 30px 0 15px 0; border: 1px solid #000; text-transform: uppercase; letter-spacing: 1px; }
+        
+        /* Question Styling */
+        .q-block { margin-bottom: 35px; page-break-inside: avoid; border-bottom: 1px solid #eee; padding-bottom: 20px; }
+        .options { list-style: none; padding-left: 25px; margin-top: 10px; }
+        .options li { margin-bottom: 8px; }
+        textarea { width: 100%; height: 80px; margin: 10px 0; border: 1px solid #999; padding: 10px; font-family: 'Segoe UI', sans-serif; resize: vertical; }
+
+        /* Marking System */
+        .marking-scheme { display: none; background: #fffde7; border: 1px solid #ffd54f; padding: 15px; margin: 10px 0; border-radius: 4px; font-size: 0.95rem; }
+        .keyword { color: #c0392b; font-weight: bold; text-decoration: underline; }
+        .mark-selector { display: none; background: #e3f2fd; padding: 10px; border-radius: 4px; color: #1565c0; font-weight: bold; margin-top: 5px; }
+        
+        /* Control Buttons */
+        .btn-container { text-align: center; margin-top: 40px; padding-top: 20px; border-top: 2px solid #333; }
+        button { padding: 14px 28px; cursor: pointer; font-weight: bold; border: none; border-radius: 4px; transition: 0.3s; margin: 5px; }
+        .btn-main { background: var(--dse-blue); color: white; }
+        .btn-mark { background: var(--dse-gold); color: white; }
+        .btn-reset { background: #7f8c8d; color: white; }
+        button:hover { opacity: 0.9; transform: translateY(-1px); }
+
+        /* Results Display */
+        #results { display: none; border: 5px double var(--dse-green); padding: 30px; margin-top: 40px; text-align: center; background: #f9fdfa; }
+        .grade-stamp { font-size: 5rem; color: #c0392b; font-weight: bold; border: 8px solid #c0392b; display: inline-block; padding: 15px 30px; transform: rotate(-10deg); margin: 20px 0; }
         .hidden { display: none; }
     </style>
 </head>
@@ -22,129 +41,161 @@
 
 <div class="paper">
     <div class="header">
-        <h2>HKDSE ICT MOCK EXAMINATION</h2>
-        <p>PAPER 1 (COMPULSORY PART) - COMPUTER SYSTEMS</p>
+        <h1 style="margin:0;">HONG KONG DIPLOMA OF SECONDARY EDUCATION</h1>
+        <h2 style="margin:5px 0;">INFORMATION AND COMMUNICATION TECHNOLOGY</h2>
+        <p><b>PAPER 1 (COMPULSORY PART) - COMPUTER SYSTEMS MOCK</b></p>
     </div>
 
-    <div id="exam-content">
-        <div class="section-title">SECTION A: Multiple Choice (10 Questions)</div>
+    <div id="exam-area">
+        <div class="section-title">Section A: Multiple Choice (10 Questions)</div>
         <div id="mc-container"></div>
 
-        <div class="section-title">SECTION B: Structured Long Questions (3 Questions)</div>
+        <div class="section-title">Section B: Structured Questions (3 Scenarios)</div>
         <div id="long-container"></div>
     </div>
 
     <div class="btn-container">
-        <button id="submit-btn" onclick="gradePaper()">SUBMIT AND PREDICT GRADE</button>
-        <button onclick="location.reload()" style="background:#7f8c8d">GENERATE NEW PAPER</button>
+        <button id="mark-toggle-btn" class="btn-mark" onclick="revealMarkingScheme()">SHOW MARKING SCHEME & SELF-MARK</button>
+        <button id="submit-btn" class="btn-main hidden" onclick="gradePaper()">GENERATE FINAL TRANSCRIPT</button>
+        <button class="btn-reset" onclick="location.reload()">GENERATE NEW RANDOM PAPER</button>
     </div>
 
     <div id="results">
-        <h2>OFFICIAL TRANSCRIPT</h2>
+        <h2 style="text-decoration: underline;">OFFICIAL EXAMINATION REPORT</h2>
         <div class="grade-stamp" id="grade">--</div>
-        <div id="score-details" style="margin-top:20px"></div>
-        <div id="answers-key" style="margin-top:20px; font-size: 0.9rem; color: #555;"></div>
+        <div id="score-details" style="font-size: 1.3rem; margin-top: 10px;"></div>
+        <p style="color: #666; font-style: italic; margin-top: 20px;">*Grade based on weighted performance in MC and Structured sections.</p>
     </div>
 </div>
 
 <script>
-// EXTENDED QUESTION BANK
+// --- EXTENDED QUESTION POOL ---
 const mcBank = [
-    {q: "Which register is responsible for holding the address of the current memory location being accessed?", a: ["PC", "MAR", "MDR", "ALU"], c: 1},
-    {q: "What is the primary reason for using a 3D printer in a medical lab?", a: ["High speed printing", "Low material cost", "Creating custom prosthetics", "Replacing 2D inkjet"], c: 2},
-    {q: "Which part of the CPU is considered the 'Brain' that coordinates signals?", a: ["ALU", "Control Unit", "Cache", "Bus"], c: 1},
-    {q: "A computer uses 'Virtual Memory' when...", a: ["The CPU is too hot", "The RAM is full", "The SSD is disconnected", "Internet is slow"], c: 1},
-    {q: "Which port is used specifically for high-speed digital displays and usually supports Daisy-Chaining?", a: ["VGA", "HDMI", "DisplayPort", "USB 2.0"], c: 2},
-    {q: "The process of combining multiple physical servers into one through software is:", a: ["Batching", "Parallelism", "Virtualization", "Distribution"], c: 2},
-    {q: "Which memory type is used to reduce the speed gap between CPU and RAM?", a: ["ROM", "Secondary Storage", "Cache", "Virtual Memory"], c: 2},
-    {q: "A point-of-sale (POS) system uses which input for rapid data entry?", a: ["Keyboard", "OCR", "Barcode Scanner", "Mic"], c: 2},
-    {q: "Which processing is used when thousands of payroll records are handled at once?", a: ["Real-time", "Batch", "Interactive", "Online"], c: 1},
-    {q: "What is the result of increasing the 'Clock Speed'?", a: ["More storage space", "More instructions per second", "Better internet", "Higher resolution"], c: 1},
-    {q: "Which printer is 'Impact' based?", a: ["Laser", "Inkjet", "Dot-Matrix", "Thermal"], c: 2},
-    {q: "Which is non-volatile?", a: ["SRAM", "DRAM", "EEPROM", "L1 Cache"], c: 2}
+    {q: "Which register stores the instruction currently being decoded?", a: ["PC", "MAR", "MDR", "CIR"], c: 3},
+    {q: "Which bus transmits timing signals to coordinate hardware?", a: ["Data Bus", "Address Bus", "Control Bus", "I/O Bus"], c: 2},
+    {q: "What is the primary function of the ALU?", a: ["Fetch data", "Decode instructions", "Logic and math", "Manage memory"], c: 2},
+    {q: "Which memory is volatile?", a: ["ROM", "RAM", "SSD", "Flash"], c: 1},
+    {q: "Which printer type is most suitable for high-precision architectural drawings?", a: ["Inkjet", "Thermal", "Plotter", "Dot-Matrix"], c: 2},
+    {q: "Which interface supports daisy-chaining multiple monitors?", a: ["VGA", "HDMI", "DisplayPort", "DVI"], c: 2},
+    {q: "Increasing word length from 32-bit to 64-bit primarily increases:", a: ["Clock Speed", "Data processing width", "Disk space", "Screen resolution"], c: 1},
+    {q: "Which processing mode is used for a flight simulator?", a: ["Batch", "Real-time", "Distributed", "Sequential"], c: 1},
+    {q: "What utility reorganizes disk fragments for faster access?", a: ["Compiler", "Defragmenter", "Driver", "OS Kernel"], c: 1},
+    {q: "Which storage uses laser technology to read/write data?", a: ["HDD", "SSD", "Optical (Blu-ray)", "Magnetic Tape"], c: 2},
+    {q: "Which register points to the address of the NEXT instruction?", a: ["MDR", "PC", "CIR", "Accumulator"], c: 1},
+    {q: "Why is virtualization used in data centers?", a: ["Increase clock speed", "Consolidate hardware resources", "Prevent viruses", "Increase PPI"], c: 1},
+    {q: "Which is a characteristic of a Dot-Matrix printer?", a: ["Very quiet", "Uses impact pins", "High photo quality", "Requires heat-sensitive paper"], c: 1},
+    {q: "A biometrics system uses which for security?", a: ["Smart Card", "Fingerprint/Iris", "OCR", "Barcodes"], c: 1},
+    {q: "Which bus is unidirectional?", a: ["Data Bus", "Control Bus", "Address Bus", "Expansion Bus"], c: 2}
 ];
 
 const longBank = [
-    {s: "Scenario: A smart greenhouse uses sensors to monitor temperature.", p: [
-        {q: "i) Name the type of device required to convert the digital signal from the computer to a physical action (e.g. opening a window).", a: "Actuator"},
-        {q: "ii) Explain why real-time processing is necessary here.", a: "To prevent plants from dying if temperature spikes suddenly."}
+    {s: "Scenario: A company processes 10,000 employee salaries at the end of every month.", p: [
+        {q: "i) State the processing mode used for this task (1 mark).", k: "Batch Processing"},
+        {q: "ii) Explain one advantage of using this mode over real-time processing (2 marks).", k: "Efficiency/Resource utilization AND handles high volume without user interaction AND processes during off-peak hours."}
     ]},
-    {s: "Scenario: A user is upgrading an old PC's HDD to an SSD.", p: [
-        {q: "i) State two advantages of SSD over HDD.", a: "Higher speed and better durability (no moving parts)."},
-        {q: "ii) Will defragmenting this new SSD help? Explain.", a: "No, SSDs use flash memory and defragging can actually reduce their lifespan."}
+    {s: "Scenario: A photographer is concerned about image quality and file size.", p: [
+        {q: "i) Explain how 'Colour Depth' affects image quality (2 marks).", k: "Higher bit depth allows more colors per pixel AND results in more realistic/vibrant images."},
+        {q: "ii) State the effect of increasing resolution on file size (1 mark).", k: "Increases file size significantly because more pixels must be stored."}
     ]},
-    {s: "Scenario: A company uses a 'Distributed Processing' system for data mining.", p: [
-        {q: "i) Define Distributed Processing.", a: "Tasks are spread across multiple computers connected via a network."},
-        {q: "ii) State one disadvantage of this system.", a: "Complex security and network dependence."}
+    {s: "Scenario: A smart home system uses actuators to close curtains automatically.", p: [
+        {q: "i) Define the role of an 'Actuator' in this system (2 marks).", k: "Converts digital control signals AND into physical/mechanical movement."},
+        {q: "ii) Why is the OS kernel important here? (1 mark)", k: "To manage hardware resources and process sensor input."}
     ]},
-    {s: "Scenario: A graphic designer uses a monitor with high color depth.", p: [
-        {q: "i) Define 'Color Depth'.", a: "The number of bits used to represent the color of a single pixel."},
-        {q: "ii) Suggest an input device suitable for professional drawing.", a: "Graphic Tablet / Stylus."}
+    {s: "Scenario: A computer system is becoming slow when opening large files on an HDD.", p: [
+        {q: "i) Suggest a utility to improve HDD performance and explain its logic (2 marks).", k: "Disk Defragmenter AND it rearranges file fragments into contiguous sectors."},
+        {q: "ii) Would this utility be used for an SSD? Explain (2 marks).", k: "No AND it wears out flash cells AND SSDs have no physical read head to benefit from it."}
+    ]},
+    {s: "Scenario: A CPU executes a machine cycle.", p: [
+        {q: "i) Describe the flow of an address during the Fetch stage (2 marks).", k: "Address moves from Program Counter (PC) AND to Memory Address Register (MAR)."},
+        {q: "ii) Where is the actual instruction data stored once fetched? (1 mark)", k: "Memory Data Register (MDR) / Current Instruction Register (CIR)."}
     ]}
 ];
 
-// GENERATION LOGIC
+// --- ENGINE LOGIC ---
 function shuffle(array) { return array.sort(() => Math.random() - 0.5); }
 
-const selectedMC = shuffle([...mcBank]).slice(0, 10);
-const selectedLong = shuffle([...longBank]).slice(0, 3);
+let selectedMC = [];
+let selectedLong = [];
 
-const mcCont = document.getElementById('mc-container');
-selectedMC.forEach((item, i) => {
-    mcCont.innerHTML += `
-        <div class="q-block">
-            <b>${i+1}.</b> ${item.q}<br>
-            <ul class="options">
-                ${item.a.map((opt, idx) => `<li><input type="radio" name="mc${i}" value="${idx}"> ${opt}</li>`).join('')}
-            </ul>
-        </div>
-    `;
-});
+function generatePaper() {
+    selectedMC = shuffle([...mcBank]).slice(0, 10);
+    selectedLong = shuffle([...longBank]).slice(0, 3);
 
-const longCont = document.getElementById('long-container');
-selectedLong.forEach((item, i) => {
-    longCont.innerHTML += `
-        <div class="q-block">
-            <b>Q${i+1} [Structured]</b><br><i>${item.s}</i><br>
-            ${item.p.map((part, pi) => `
+    let mcHTML = "";
+    selectedMC.forEach((item, i) => {
+        mcHTML += `
+            <div class="q-block">
+                <b>${i+1}.</b> ${item.q}<br>
+                <ul class="options">
+                    ${item.a.map((opt, idx) => `<li><input type="radio" name="mc${i}" value="${idx}"> ${String.fromCharCode(65+idx)}. ${opt}</li>`).join('')}
+                </ul>
+            </div>`;
+    });
+    document.getElementById('mc-container').innerHTML = mcHTML;
+
+    let longHTML = "";
+    selectedLong.forEach((item, i) => {
+        let parts = "";
+        item.p.forEach((part, pi) => {
+            parts += `
                 <p>${part.q}</p>
-                <textarea style="width:100%; height:50px;"></textarea>
-            `).join('')}
-        </div>
-    `;
-});
+                <textarea placeholder="Write your response..."></textarea>
+                <div id="scheme-${i}-${pi}" class="marking-scheme">
+                    <b>MARKING SCHEME KEYWORDS:</b> <span class="keyword">${part.k}</span>
+                </div>
+                <div id="selector-${i}-${pi}" class="mark-selector">
+                    Award Marks (0-2): 
+                    <select class="self-mark-val">
+                        <option value="0">0</option><option value="1">1</option><option value="2">2</option>
+                    </select>
+                </div>`;
+        });
+        longHTML += `<div class="q-block"><b>Question ${i+1} [Structured]</b><br><i>${item.s}</i><br>${parts}</div>`;
+    });
+    document.getElementById('long-container').innerHTML = longHTML;
+}
+
+generatePaper();
+
+function revealMarkingScheme() {
+    document.querySelectorAll('.marking-scheme, .mark-selector').forEach(el => el.style.display = 'block');
+    document.getElementById('mark-toggle-btn').style.display = 'none';
+    document.getElementById('submit-btn').classList.remove('hidden');
+    window.scrollTo(0, document.getElementById('long-container').offsetTop);
+}
 
 function gradePaper() {
     let mcScore = 0;
-    let keyHTML = "<h3>Answer Key:</h3>";
-    
     selectedMC.forEach((item, i) => {
         const sel = document.querySelector(`input[name="mc${i}"]:checked`);
         if(sel && parseInt(sel.value) === item.c) mcScore++;
-        keyHTML += `MC${i+1}: ${item.a[item.c]} | `;
     });
 
-    // Simulated Long Question Grading (User self-assessment)
-    const longScore = confirm("DSE ICT Tip: Long questions are graded by markers. For this simulation, did you answer the structured questions accurately based on your notes?") ? 10 : 4;
-    
-    const totalRaw = mcScore + longScore;
-    const percent = (totalRaw / 20) * 100;
-    
-    let g = "U";
-    if(percent >= 90) g="5**";
-    else if(percent >= 80) g="5*";
-    else if(percent >= 70) g="5";
-    else if(percent >= 60) g="4";
-    else if(percent >= 50) g="3";
-    else if(percent >= 40) g="2";
+    let longScore = 0;
+    document.querySelectorAll('.self-mark-val').forEach(select => {
+        longScore += parseInt(select.value);
+    });
 
-    document.getElementById('grade').innerText = g;
-    document.getElementById('score-details').innerHTML = `MC: ${mcScore}/10 | Structured: ${longScore}/10<br>Weighted Score: ${percent}%`;
-    document.getElementById('answers-key').innerHTML = keyHTML;
+    // Total raw marks roughly 25 (10 MC + ~15 Structured)
+    const percentage = ((mcScore + longScore) / 25) * 100;
+    
+    let grade = "U";
+    if(percentage >= 88) grade = "5**";
+    else if(percentage >= 78) grade = "5*";
+    else if(percentage >= 68) grade = "5";
+    else if(percentage >= 58) grade = "4";
+    else if(percentage >= 48) grade = "3";
+    else if(percentage >= 38) grade = "2";
+
+    document.getElementById('grade').innerText = grade;
+    document.getElementById('score-details').innerHTML = `
+        Section A (MC): ${mcScore}/10 <br>
+        Section B (Structured): ${longScore} marks awarded <br>
+        <strong>Overall Grade: Level ${grade}</strong>
+    `;
     document.getElementById('results').style.display = 'block';
     window.scrollTo(0, document.body.scrollHeight);
 }
 </script>
-
 </body>
 </html>
