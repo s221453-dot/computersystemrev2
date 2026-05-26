@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HKDSE ICT Study Portal</title>
+    <style>
+        :root {
+            --primary: #2c3e50;
+            --accent: #3498db;
+            --success: #27ae60;
+            --bg: #f4f7f6;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg);
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            color: white;
+            width: 100%;
+            padding: 50px 0;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        h1 { margin: 0; font-size: 2.5rem; }
+        p { opacity: 0.9; font-size: 1.1rem; }
+
+        .container {
+            max-width: 1000px;
+            width: 90%;
+            margin-top: -40px; /* Overlap with header */
+        }
+
+        .btn-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            padding-bottom: 50px;
+        }
+
+        .card {
+            background: white;
+            padding: 40px 30px;
+            border-radius: 15px;
+            text-align: center;
+            text-decoration: none;
+            color: var(--primary);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+            border-top: 5px solid transparent;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        /* Card Hover Effects */
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+            border-top-color: var(--accent);
+        }
+
+        .card h2 {
+            margin: 0 0 15px 0;
+            color: var(--accent);
+        }
+
+        .card p {
+            color: #666;
+            font-size: 0.95rem;
+            margin: 0;
+        }
+
+        .footer {
+            margin-top: auto;
+            padding: 20px;
+            color: #888;
+            font-size: 0.8rem;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>HKDSE ICT Revision Portal</h1>
+        <p>Computer System Basics & Hardware Notes</p>
+    </header>
+
+    <div class="container">
+        <div class="btn-grid">
+            
+            <a href="cs1.html" class="card">
+                <h2>Input & Output</h2>
+                <p>I/O devices, QR codes, Biometrics, Printers, and Display Specs (VGA/HDMI).</p>
+            </a>
+
+            <a href="cs2.html" class="card">
+                <h2>Hardware & CPU</h2>
+                <p>CPU Architecture, Registers (PC/MAR/MDR), Cache, RAM/ROM, and Storage (SSD/HDD).</p>
+            </a>
+
+            <a href="cs3.html" class="card">
+                <h2>Software & OS</h2>
+                <p>Operating Systems, Utilities, Processing methods (Batch/Real-time), and Virtualization.</p>
+            </a>
+<a href="cst.html" class="card">
+                <h2>MC TEST</h2>
+                
+            </a>
+<a href="csm.html" class="card">
+                <h2>Mock TEST</h2>
+                
+            </a>
+
+
+        </div>
+    </div>
+
+    <div class="footer">
+        DSE ICT Revision Guide • Created for Quick Access
+    </div>
+
+</body>
+</html>
+            font-size: 0.\

@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>HKDSE ICT Pro Quiz System</title>
+    <style>
+        :root {
+            --primary: #2c3e50;
+            --accent: #e67e22;
+            --bg: #fdfefe;
+        }
+        body { font-family: 'Segoe UI', sans-serif; background: #ecf0f1; margin: 0; padding: 20px; display: flex; justify-content: center; }
+        .quiz-container { background: white; max-width: 800px; width: 100%; padding: 40px; border-radius: 12px; box-shadow: 0 15px 35px rgba(0,0,0,0.2); }
+        h1 { text-align: center; color: var(--primary); border-bottom: 2px solid var(--accent); padding-bottom: 10px; }
+        
+        .setup-group { margin-bottom: 20px; }
+        label { display: block; margin-bottom: 8px; font-weight: bold; color: #34495e; }
+        select, input { width: 100%; padding: 12px; border-radius: 6px; border: 1px solid #bdc3c7; font-size: 1rem; }
+        
+        .hidden { display: none; }
+        .question { font-size: 1.3rem; margin-bottom: 25px; line-height: 1.4; color: #2c3e50; min-height: 80px; }
+        .options { display: grid; gap: 12px; }
+        .option-btn { 
+            padding: 18px; border: 1px solid #dcdde1; border-radius: 8px; 
+            background: #fff; cursor: pointer; text-align: left; font-size: 1rem; transition: 0.2s;
+        }
+        .option-btn:hover { background: #f8f9fa; border-color: var(--accent); }
+        .correct { background: #2ecc71 !important; color: white; border-color: #27ae60 !important; }
+        .wrong { background: #e74c3c !important; color: white; border-color: #c0392b !important; }
+        
+        .btn-main { 
+            width: 100%; padding: 15px; background: var(--primary); color: white; 
+            border: none; border-radius: 8px; font-size: 1.1rem; cursor: pointer; margin-top: 30px; font-weight: bold;
+        }
+        .btn-main:hover { background: #34495e; }
+        .progress { color: #7f8c8d; font-weight: bold; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 1px; }
+        .rationale { margin-top: 15px; padding: 15px; background: #e8f4fd; border-left: 5px solid #3498db; border-radius: 4px; display: none; }
+    </style>
+</head>
+<body>
+
+<div class="quiz-container">
+    <h1 id="title">ICT Ultimate Challenge</h1>
+
+    <div id="setup-screen">
+        <div class="setup-group">
+            <label>Knowledge Domain:</label>
+            <select id="category">
+                <option value="all">Full Syllabus (I/O, Hardware, Software)</option>
+                <option value="io">Input & Output Systems</option>
+                <option value="hardware">CPU & Architecture</option>
+                <option value="software">OS & Processing</option>
+            </select>
+        </div>
+        <div class="setup-group">
+            <label>Difficulty Tier:</label>
+            <select id="difficulty">
+                <option value="easy">Standard (DSE Paper 1A)</option>
+                <option value="hard">Hard (Scenario & Analysis)</option>
+            </select>
+        </div>
+        <div class="setup-group">
+            <label>Question Limit (Set to 999 for "Endless"):</label>
+            <input type="number" id="q-count" value="10" min="1">
+        </div>
+        <button class="btn-main" onclick="startQuiz()">Generate Mock Exam</button>
+    </div>
+
+    <div id="quiz-screen" class="hidden">
+        <div class="progress" id="progress-text"></div>
+        <div id="question-text" class="question"></div>
+        <div id="options-container" class="options"></div>
+        <div id="rationale-box" class="rationale"></div>
+        <button id="next-btn" class="btn-main hidden" onclick="nextQuestion()">Continue</button>
+    </div>
+
+    <div id="result-screen" class="hidden">
+        <h2 style="text-align:center">Exam Result</h2>
+        <p id="score-text" style="text-align:center; font-size: 2rem; font-weight: bold;"></p>
+        <p id="feedback" style="text-align:center; color: #7f8c8d;"></p>
+        <button class="btn-main" onclick="location.reload()">Reset Question Bank</button>
+    </div>
+</div>
+
+<script>
+    const questionBank = [
+        // HARD HARDWARE
+        { cat: 'hardware', diff: 'hard', q: "During a machine cycle, the PC (Program Counter) is incremented. In which stage does this usually happen?", a: ["Fetch", "Decode", "Execute", "Store"], correct: 0, why: "The PC increments as soon as the current instruction is fetched so it points to the next address immediately." },
+        { cat: 'hardware', diff: 'hard', q: "A CPU has a 64-bit word length. This specifically means:", a: ["It can access 64GB of RAM", "The ALU processes 64 bits in one cycle", "The clock speed is 6.4 GHz", "The cache has 64 layers"], correct: 1, why: "Word length is the number of bits the CPU can process as a single unit." },
+        { cat: 'hardware', diff: 'hard', q: "Which of the following would improve the performance of a 'CPU-bound' task the most?", a: ["Increasing RAM capacity", "Increasing Clock Speed", "Buying a larger HDD", "Upgrading the GPU"], correct: 1, why: "CPU-bound tasks are limited by processing cycles, so higher clock speed helps directly." },
+        
+        // HARD I/O
+        { cat: 'io', diff: 'hard', q: "An architect needs to produce a physical high-precision technical drawing on A0 size paper. Which device is best?", a: ["Laser Printer", "3D Printer", "Plotter", "Dot-matrix Printer"], correct: 2, why: "Plotters use pens to draw continuous lines, making them superior for large-scale technical blueprints." },
+        { cat: 'io', diff: 'hard', q: "Why is an OLED screen considered more energy-efficient than an LCD for displaying true black images?", a: ["OLED uses a dimmable LED backlight", "Pixels in OLED are physically turned off", "OLED uses liquid crystals to block light", "OLED has lower resolution"], correct: 1, why: "OLED pixels emit their own light; to show black, the pixel simply draws zero power." },
+        
+        // HARD SOFTWARE
+        { cat: 'software', diff: 'hard', q: "Which processing method is most suitable for a sensor-based 'Intruder Alert System'?", a: ["Batch Processing", "Real-time Processing", "Parallel Processing", "Distributed Processing"], correct: 1, why: "Intruder alerts require immediate action without any delay, which defines Real-time processing." },
+        { cat: 'software', diff: 'hard', q: "What is the primary benefit of Virtualization in a data center?", a: ["Increases the physical speed of the CPU", "Allows one server to run multiple OS instances", "Eliminates the need for secondary storage", "Provides better cooling for hardware"], correct: 1, why: "Virtualization allows for hardware consolidation, saving space and power by running many VMs on one server." },
+        { cat: 'software', diff: 'hard', q: "A user reports that opening large files on their 5-year-old HDD has become very slow. Which utility should be run first?", a: ["Anti-virus", "Disk Formatter", "Disk Defragmenter", "Registry Cleaner"], correct: 2, why: "On HDDs, files become fragmented over time; defragging puts the pieces back together for faster reading." },
+
+        // EASY SAMPLES
+        { cat: 'io', diff: 'easy', q: "Which is a 'Direct Data Entry' device?", a: ["Keyboard", "Mouse", "RFID Reader", "Touchpad"], correct: 2, why: "RFID enters data automatically without manual typing or clicking." },
+        { cat: 'hardware', diff: 'easy', q: "Which part of the CPU performs logical comparisons (e.g., A > B)?", a: ["Control Unit", "ALU", "Registers", "Cache"], correct: 1, why: "The ALU handles all Arithmetic and Logic operations." }
+    ];
+
+    let sessionQuestions = [];
+    let currentIndex = 0;
+    let score = 0;
+
+    function startQuiz() {
+        const cat = document.getElementById('category').value;
+        const diff = document.getElementById('difficulty').value;
+        const count = parseInt(document.getElementById('q-count').value);
+
+        sessionQuestions = questionBank.filter(q => 
+            (cat === 'all' || q.cat === cat) && (q.diff === diff)
+        );
+
+        // Shuffle logic
+        sessionQuestions = sessionQuestions.sort(() => Math.random() - 0.5);
+        
+        // Ensure we don't exceed bank size but allow user to set high limits
+        const limit = Math.min(count, sessionQuestions.length);
+        sessionQuestions = sessionQuestions.slice(0, limit);
+
+        if(sessionQuestions.length === 0) {
+            alert("No questions in the bank match these settings yet. Try 'Standard' difficulty or 'Full Syllabus'.");
+            return;
+        }
+
+        document.getElementById('setup-screen').classList.add('hidden');
+        document.getElementById('quiz-screen').classList.remove('hidden');
+        showQuestion();
+    }
+
+    function showQuestion() {
+        const q = sessionQuestions[currentIndex];
+        document.getElementById('progress-text').innerText = `Question ${currentIndex + 1} / ${sessionQuestions.length}`;
+        document.getElementById('question-text').innerText = q.q;
+        document.getElementById('rationale-box').style.display = 'none';
+        
+        const container = document.getElementById('options-container');
+        container.innerHTML = '';
+        
+        q.a.forEach((opt, index) => {
+            const btn = document.createElement('button');
+            btn.className = 'option-btn';
+            btn.innerText = opt;
+            btn.onclick = () => checkAnswer(index, btn);
+            container.appendChild(btn);
+        });
+        document.getElementById('next-btn').classList.add('hidden');
+    }
+
+    function checkAnswer(idx, btn) {
+        const q = sessionQuestions[currentIndex];
+        const correctIdx = q.correct;
+        const allBtns = document.querySelectorAll('.option-btn');
+        const ratBox = document.getElementById('rationale-box');
+        
+        allBtns.forEach(b => b.disabled = true);
+        
+        ratBox.innerText = "💡 " + q.why;
+        ratBox.style.display = 'block';
+
+        if(idx === correctIdx) {
+            btn.classList.add('correct');
+            score++;
+        } else {
+            btn.classList.add('wrong');
+            allBtns[correctIdx].classList.add('correct');
+        }
+        document.getElementById('next-btn').classList.remove('hidden');
+    }
+
+    function nextQuestion() {
+        currentIndex++;
+        if(currentIndex < sessionQuestions.length) {
+            showQuestion();
+        } else {
+            showResult();
+        }
+    }
+
+    function showResult() {
+        document.getElementById('quiz-screen').classList.add('hidden');
+        document.getElementById('result-screen').classList.remove('hidden');
+        const finalScore = Math.round((score / sessionQuestions.length) * 100);
+        document.getElementById('score-text').innerText = `${finalScore}% (${score}/${sessionQuestions.length})`;
+        
+        let msg = finalScore >= 80 ? "Excellent! You are DSE-ready." : "Keep studying. Focus on the 'Hard' application questions.";
+        document.getElementById('feedback').innerText = msg;
+    }
+</script>
+
+</body>
+</html>

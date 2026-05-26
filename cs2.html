@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>HKDSE ICT: Computer Hardware & CPU</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6; color: #333; max-width: 900px; margin: auto; padding: 20px; background-color: #f4f4f9; }
+        h1 { color: #2c3e50; text-align: center; border-bottom: 3px solid #3498db; padding-bottom: 10px; }
+        h2 { color: #2980b9; border-left: 5px solid #2980b9; padding-left: 10px; margin-top: 30px; }
+        h3 { color: #d35400; }
+        table { width: 100%; border-collapse: collapse; margin: 15px 0; background: white; }
+        th, td { border: 1px solid #ccc; padding: 10px; text-align: left; }
+        th { background-color: #3498db; color: white; }
+        .highlight { font-weight: bold; color: #e74c3c; }
+        .system-box { border: 2px dashed #7f8c8d; padding: 15px; background: #fff; border-radius: 8px; }
+    </style>
+</head>
+<body>
+
+    <h1>Computer Hardware & CPU Architecture</h1>
+
+    <div class="system-box">
+        <h3>The System Unit & Motherboard</h3>
+        <p><b>System Unit:</b> The main case that houses the internal components.</p>
+        <p><b>Motherboard:</b> The main circuit board. It acts as the "highway," connecting the CPU, RAM, and all other peripherals via buses.</p>
+    </div>
+
+    <h2>1. The Central Processing Unit (CPU)</h2>
+    <p>The "Brain" of the computer. Its performance is measured by:</p>
+    <ul>
+        <li><b>Clock Speed:</b> Measured in <b>Hertz (Hz)</b>. The number of cycles performed per second.</li>
+        <li><b>Clock Cycle:</b> The smallest unit of time for a processor to perform an instruction.</li>
+        <li><b>Cores:</b> Multiple processors on one chip. More cores = better multi-tasking.</li>
+        <li><b>Word Length:</b> The number of bits a CPU can process at once (e.g., 64-bit).</li>
+    </ul>
+
+    <h3>Internal Components of CPU</h3>
+    <table>
+        <tr>
+            <th>Component</th>
+            <th>Function</th>
+        </tr>
+        <tr>
+            <td><b>Control Unit (CU)</b></td>
+            <td>Manages the execution of instructions and controls the flow of data.</td>
+        </tr>
+        <tr>
+            <td><b>ALU</b></td>
+            <td>Arithmetic Logic Unit. Performs math ($+, -, \times, \div$) and logic (AND, OR, NOT).</td>
+        </tr>
+        <tr>
+            <td><b>Registers</b></td>
+            <td>High-speed, tiny storage locations <b>inside</b> the CPU.</td>
+        </tr>
+        <tr>
+            <td><b>Cache Memory</b></td>
+            <td>Very fast memory between CPU and RAM. Stores frequently used data to speed up processing.</td>
+        </tr>
+    </table>
+
+    <h3>Special Purpose Registers (The "Big Four")</h3>
+    <ul>
+        <li><b>Program Counter (PC):</b> Holds the address of the <b>next</b> instruction.</li>
+        <li><b>MAR:</b> Memory Address Register. Holds the address of the current data being read/written.</li>
+        <li><b>MDR:</b> Memory Data Register. Holds the actual data fetched from or waiting to be sent to memory.</li>
+        <li><b>Accumulator:</b> Stores the intermediate results of calculations from the ALU.</li>
+    </ul>
+
+    <h2>2. The Machine Cycle</h2>
+    <p>The process of handling one instruction: <b>Fetch &rarr; Decode &rarr; Execute &rarr; Store.</b></p>
+
+    <hr>
+
+    <h2>3. Memory Hierarchy</h2>
+    
+    <h3>Main Memory: RAM vs. ROM</h3>
+    <table>
+        <tr>
+            <th>Feature</th>
+            <th>RAM (Random Access Memory)</th>
+            <th>ROM (Read Only Memory)</th>
+        </tr>
+        <tr>
+            <td><b>Volatility</b></td>
+            <td class="highlight">Volatile (Data lost when power is off)</td>
+            <td>Non-Volatile (Data stays)</td>
+        </tr>
+        <tr>
+            <td><b>Usage</b></td>
+            <td>Current running programs/data.</td>
+            <td>Startup instructions (BIOS/Firmware).</td>
+        </tr>
+    </table>
+
+    <h3>Secondary Storage</h3>
+    <p>Used for permanent storage. Categorized by <b>Access Method</b>:</p>
+    <ul>
+        <li><b>Sequential Access:</b> Must read data in order (e.g., Magnetic Tape). Slow for finding specific files.</li>
+        <li><b>Direct Access:</b> Can jump straight to any file (e.g., Hard Disk, SSD). Fast.</li>
+    </ul>
+
+    <table>
+        <tr>
+            <th>Storage Type</th>
+            <th>Technology</th>
+            <th>Pros</th>
+            <th>Cons</th>
+        </tr>
+        <tr>
+            <td><b>Hard Disk (HDD)</b></td>
+            <td>Magnetic</td>
+            <td>Cheap, huge capacity.</td>
+            <td>Slow, fragile (moving parts).</td>
+        </tr>
+        <tr>
+            <td><b>SSD</b></td>
+            <td>Flash
