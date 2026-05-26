@@ -4,64 +4,107 @@
     <meta charset="UTF-8">
     <title>HKDSE ICT: Software & Processing</title>
     <style>
-        body { font-family: 'Segoe UI', sans-serif; line-height: 1.6; max-width: 900px; margin: auto; padding: 20px; background-color: #f0f4f8; }
-        h1 { color: #2c3e50; text-align: center; border-bottom: 3px solid #27ae60; }
-        h2 { color: #27ae60; background: #eafaf1; padding: 8px; border-radius: 4px; }
-        h3 { color: #2ecc71; border-bottom: 1px solid #ccc; }
+        body { font-family: 'Segoe UI', sans-serif; line-height: 1.6; max-width: 1000px; margin: auto; padding: 20px; background-color: #f0f4f8; }
+        h1 { color: #2c3e50; text-align: center; border-bottom: 3px solid #27ae60; padding-bottom: 10px; }
+        h2 { color: #ffffff; background: #27ae60; padding: 10px; border-radius: 4px; margin-top: 30px; }
+        h3 { color: #2e7d32; border-left: 5px solid #27ae60; padding-left: 10px; margin-top: 20px; }
+        .card { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); margin-bottom: 20px; }
         table { width: 100%; border-collapse: collapse; margin: 15px 0; background: white; }
-        th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
-        th { background-color: #27ae60; color: white; }
-        .code-font { font-family: 'Courier New', Courier, monospace; background: #eee; padding: 2px 4px; }
+        th, td { border: 1px solid #ddd; padding: 12px; text-align: left; }
+        th { background-color: #f4f4f4; color: #333; }
+        .keyword { font-weight: bold; color: #d32f2f; }
     </style>
 </head>
 <body>
 
-    <h1>Software & Operating Systems</h1>
+    <h1>Part 3: Software Systems & Advanced Processing</h1>
 
-    <h2>1. System Software vs. Application Software</h2>
-    <table>
-        <tr>
-            <th>Type</th>
-            <th>Purpose</th>
-            <th>Examples</th>
-        </tr>
-        <tr>
-            <td><b>System Software</b></td>
-            <td>Manages hardware and provides a platform for applications.</td>
-            <td>Operating Systems, Utilities, Device Drivers.</td>
-        </tr>
-        <tr>
-            <td><b>Application Software</b></td>
-            <td>Performs specific tasks for the end-user.</td>
-            <td>Word processors, Games, Web browsers.</td>
-        </tr>
-    </table>
+    <h2>1. Categories of Application Software</h2>
+    <div class="card">
+        <p>In DSE, you must categorize applications based on their <strong>intended use</strong>:</p>
+        <table>
+            <tr>
+                <th>Category</th>
+                <th>Description</th>
+                <th>Examples</th>
+            </tr>
+            <tr>
+                <td><b>Productivity</b></td>
+                <td>Tools used to create documents, spreadsheets, and presentations. Focuses on efficiency in office/school tasks.</td>
+                <td>MS Word, Excel, PowerPoint, Google Sheets.</td>
+            </tr>
+            <tr>
+                <td><b>Communication</b></td>
+                <td>Facilitates the exchange of information between users over a network.</td>
+                <td>Email clients (Outlook), VoIP (Zoom, WhatsApp), Web Browsers.</td>
+            </tr>
+            <tr>
+                <td><b>Media Development</b></td>
+                <td>Used to create or edit digital content like images, videos, and audio.</td>
+                <td>Adobe Photoshop, Premiere Pro, Audacity.</td>
+            </tr>
+            <tr>
+                <td><b>Educational</b></td>
+                <td>Software designed specifically for teaching, learning, or self-assessment.</td>
+                <td>LMS (Moodle, Google Classroom), Duolingo, Math simulations.</td>
+            </tr>
+        </table>
+    </div>
 
-    <hr>
+    <h2>2. Processing Modes & Methods</h2>
+    <div class="card">
+        <h3>A. Batch Processing</h3>
+        <p>Data is collected over a period and processed <span class="keyword">all at once</span> without user intervention.</p>
+        <ul>
+            <li><b>Characteristics:</b> High volume, processed during "off-peak" hours (e.g., midnight).</li>
+            <li><b>DSE Example:</b> Generating monthly bank statements, processing payroll, utility billing (Electricity/Water).</li>
+        </ul>
 
-    <h2>2. The Operating System (OS)</h2>
-    <h3>Core Functions of an OS</h3>
-    <ul>
-        <li><b>Resource Management:</b> Allocates CPU time and Memory to different tasks.</li>
-        <li><b>File Management:</b> Organizing, naming, and storing files on storage devices.</li>
-        <li><b>User Interface:</b> Allowing the user to communicate with the computer.</li>
-        <li><b>I/O Control:</b> Managing communication with printers, keyboards, etc.</li>
-    </ul>
+        <h3>B. Real-time Processing</h3>
+        <p>Data is processed <span class="keyword">immediately</span> as it is received. The output influences the next input.</p>
+        <ul>
+            <li><b>Characteristics:</b> Requires high-speed response; used when timing is critical for safety or accuracy.</li>
+            <li><b>DSE Example:</b> Air traffic control, Nuclear power plant monitoring, Online flight booking (to prevent double-booking).</li>
+        </ul>
 
-    <h3>GUI vs. CLI</h3>
-    <ul>
-        <li><b>GUI (Graphical User Interface):</b> Uses icons, windows, and a mouse. <i>Pro:</i> User-friendly. <i>Con:</i> Uses more system resources.</li>
-        <li><b>CLI (Command Line Interface):</b> Uses text-based commands (e.g., <span class="code-font">cmd</span>). <i>Pro:</i> Fast for experts; low resources. <i>Con:</i> Hard to learn commands.</li>
-    </ul>
+        <h3>C. Parallel Processing</h3>
+        <p>Tasks are split into sub-tasks and executed <span class="keyword">simultaneously</span> using multiple CPUs (or cores) within a <span class="keyword">single computer</span>.</p>
+        <ul>
+            <li><b>Pros:</b> Massive speed increase for complex calculations.</li>
+            <li><b>Example:</b> Weather forecasting, 3D video rendering.</li>
+        </ul>
 
-    <h3>System Utilities & Drivers</h3>
-    <ul>
-        <li><b>Device Driver:</b> Small program that tells the OS how to communicate with a specific piece of hardware (e.g., a new printer).</li>
-        <li><b>Disk Defragmentation:</b> A utility that rearranges files on a <b>Hard Disk</b> so they are stored in contiguous blocks. This speeds up file access. (Note: Not needed for SSDs!)</li>
-    </ul>
+        <h3>D. Distributed Processing</h3>
+        <p>A single task is spread across multiple <span class="keyword">different computers</span> connected via a network.</p>
+        <ul>
+            <li><b>Pros:</b> Fault tolerance (if one PC fails, others continue); uses existing hardware resources.</li>
+            <li><b>Example:</b> Blockchain (Bitcoin mining), SETI@home, large-scale web searching.</li>
+        </ul>
 
-    <hr>
+        <h3>E. Virtualization</h3>
+        <p>Using software to create multiple <span class="keyword">virtual machines (VMs)</span> on one physical computer. Each VM can run its own Operating System.</p>
+        <ul>
+            <li><b>Pros:</b> Reduces hardware costs, improves <span class="keyword">resource utilization</span>, easier to test different OS environments.</li>
+            <li><b>Example:</b> Running Windows on a Mac using Parallels, Cloud servers (AWS/Azure).</li>
+        </ul>
+    </div>
 
-    <h2>3. Application Software Categories</h2>
-    <ul>
-        <li><b>Productivity:</b> Office
+    <h2>3. Operating System Specializations</h2>
+    <div class="card">
+        <h3>Types of OS</h3>
+        <ul>
+            <li><b>Single-user, Single-tasking:</b> Basic OS like MS-DOS.</li>
+            <li><b>Multi-tasking:</b> Allows one user to run multiple apps at once (Windows, macOS).</li>
+            <li><b>Multi-user:</b> Allows multiple users to access the computer's resources simultaneously (Linux servers).</li>
+        </ul>
+
+        <h3>Disk Defragmentation (Deeper Look)</h3>
+        <p>When files are saved, they are often split into "fragments" across the disk. This utility reorganizes them into <span class="keyword">contiguous sectors</span>.</p>
+        <ul>
+            <li><b>Benefit:</b> Reduces the physical movement of the <strong>Read/Write head</strong> in an HDD, speeding up the system.</li>
+            <li><b>Warning:</b> Never defrag an <strong>SSD</strong>; it doesn't have a physical head and defragging wears out the flash memory cells!</li>
+        </ul>
+    </div>
+
+</body>
+</html>
